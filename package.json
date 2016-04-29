@@ -1,0 +1,24 @@
+{
+  "name": "http-mock-server",
+  "version": "1.0.0",
+  "description": "a http server to mock external services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/actano/rplan.git"
+  },
+  "author": {
+    "name": "Actano GmbH",
+    "url": "https://rplan.com/"
+  },
+  "license": "all rights reserved",
+  "private": true,
+  "dependencies": {
+    "json-server": "0.8.10",
+    "lodash": "4.11.1",
+    "uuid": "2.0.2"
+  }
+}
