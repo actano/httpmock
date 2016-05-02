@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const get = require('lodash/fp/get')
 const querystring = require('querystring')
+const request = require('superagent')
 const uuid = require('uuid')
 
 module.exports = (env, db) => {
@@ -24,6 +25,10 @@ module.exports = (env, db) => {
   })
 
   router.get('/perform-signup', (req, res) => {
+    const notificationUrl = env.MOCK_NOTIFICATION_URL
+    const notificationUsername = env.MOCK_NOTIFICATION_USERNAME
+    const notificationPassword = env.MOCK_NOTIFICATION_PASSWORD
+
     const subscriptionId = uuid()
     const subscription = {
       customer: {
@@ -42,15 +47,44 @@ module.exports = (env, db) => {
       started_at: new Date().toISOString(),
       subscription_id: subscriptionId
     }
+    const notification = {
+      notification_id: `notification_${subscriptionId}_created`,
+      client_id: '',
+      event: {
+        type: 'subscription.created',
+        id: `event_${subscriptionId}_created`,
+        occured_at: subscription.started_at
+      },
+      resource: {
+        type: 'subscription',
+        id: subscriptionId,
+        current_state: subscription
+      }
+    }
 
     db('subscriptions').push(subscription)
 
-    res.set(200)
-    res.send(`The following subscription has been created:
-      subscription_id: ${subscription.subscription_id}
-      plan_id: ${subscription.plans[0].plan_id}
-      user_id: ${subscription.customer.user_id}
-      `)
+    request
+      .post(notificationUrl)
+      .auth(notificationUsername, notificationPassword)
+      .send(notification)
+      .end((err) => {
+        if (err) {
+          res
+            .status(500)
+            .send(`An error occured while sending the notification: ${err}`)
+
+          return
+        }
+
+        res
+          .status(200)
+          .send(`The following subscription has been created:
+            subscription_id: ${subscription.subscription_id}
+            plan_id: ${subscription.plans[0].plan_id}
+            user_id: ${subscription.customer.user_id}
+            `)
+      })
   })
 
   return router
