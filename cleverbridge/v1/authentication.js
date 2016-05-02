@@ -7,5 +7,12 @@ module.exports = (env, db) => {
     res.redirect(req.query.redirect)
   })
 
+  router.post('/customer-tokens', (req, res) => {
+    res.status(201).json({
+      expiration_date: '2100-12-31T23:59:59.000Z',
+      token: 'STUB_TOKEN'
+    })
+  })
+
   return router
 }
