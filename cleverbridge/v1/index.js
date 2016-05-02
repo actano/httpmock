@@ -1,19 +1,18 @@
-const express = require('express');
-const jsonServer = require('json-server');
+const express = require('express')
+const jsonServer = require('json-server')
 
-const authentication = require('./authentication');
-const signup = require('./signup');
-const subscription = require('./subscriptions');
-
+const authentication = require('./authentication')
+const signup = require('./signup')
+const subscription = require('./subscriptions')
 
 module.exports = (env, dbSource) => {
-    const jsonServerRouter = jsonServer.router(dbSource);
-    const router = express.Router();
+  const jsonServerRouter = jsonServer.router(dbSource)
+  const router = express.Router()
 
-    router.use(authentication(env, jsonServerRouter.db));
-    router.use(signup(env, jsonServerRouter.db));
-    router.use(subscription(env, jsonServerRouter.db));
-    router.use(jsonServerRouter);
+  router.use(authentication(env, jsonServerRouter.db))
+  router.use(signup(env, jsonServerRouter.db))
+  router.use(subscription(env, jsonServerRouter.db))
+  router.use(jsonServerRouter)
 
-    return router;
+  return router
 }

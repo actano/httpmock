@@ -1,12 +1,11 @@
-const express = require('express');
-
+const express = require('express')
 
 module.exports = (env, db) => {
-    const router = express.Router();
+  const router = express.Router()
 
-    router.get('/customer-token-cookie', (req, res) => {
-        res.redirect(req.query.redirect);
-    });
+  router.get('/customer-token-cookie', (req, res) => {
+    res.redirect(req.query.redirect)
+  })
 
-    return router;
+  return router
 }
