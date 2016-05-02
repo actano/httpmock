@@ -4,7 +4,7 @@ const cleverbridgeMockV1 = require('./cleverbridge/v1')
 
 const run = (env) => {
   const SERVER_ADDRESS = env.MOCK_SERVER_ADDRESS || '0.0.0.0'
-  const SERVER_PORT = env.MOCK_SERVER_PORT || 3000
+  const SERVER_PORT = env.MOCK_SERVER_PORT || 8082
 
   const server = jsonServer.create()
   const defaultMiddlewares = jsonServer.defaults()
