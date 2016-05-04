@@ -1,9 +1,9 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const faker = require('faker')
 const get = require('lodash/fp/get')
 const querystring = require('querystring')
 const request = require('superagent')
-const uuid = require('uuid')
 
 module.exports = (env, db) => {
   const router = express.Router()
@@ -29,13 +29,16 @@ module.exports = (env, db) => {
     const notificationUsername = env.MOCK_NOTIFICATION_USERNAME
     const notificationPassword = env.MOCK_NOTIFICATION_PASSWORD
 
-    const subscriptionId = uuid()
+    const subscriptionId = faker.random.uuid()
+    const subscriptionRenewalDate = faker.date.future()
     const subscription = {
       customer: {
         your_customer_id: req.query.user_id,
         status: 'active'
       },
       id: subscriptionId, // for mock retrieval
+      next_billing_at: subscriptionRenewalDate,
+      next_renewal_at: subscriptionRenewalDate,
       plans: [
         {
           plan_id: req.query.plan_id,
@@ -45,6 +48,7 @@ module.exports = (env, db) => {
       ],
       renewal_type: 'auto',
       started_at: new Date().toISOString(),
+      status: 'active',
       subscription_id: subscriptionId
     }
     const notification = {
