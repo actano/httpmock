@@ -6,6 +6,17 @@ const utils = require('./utils')
 module.exports = (env, db) => {
   const router = express.Router()
 
+  router.get('/subscriptions/:subscription_id/customer', (req, res) => {
+    const subscriptionId = req.params.subscription_id
+    const subscription = db('subscriptions').getById(subscriptionId)
+
+    if (!subscription) {
+      res.status(404).send('Subscription not found.')
+    } else {
+      res.json(subscription.customer)
+    }
+  })
+
   router.post('/subscriptions/:subscription_id/cancel', (req, res) => {
     const subscriptionId = req.params.subscription_id
     const subscription = db('subscriptions').updateById(subscriptionId, {
