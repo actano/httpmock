@@ -1,4 +1,5 @@
 const express = require('express')
+const faker = require('faker')
 
 module.exports = (env, db) => {
   const router = express.Router()
@@ -6,7 +7,8 @@ module.exports = (env, db) => {
   router.post('/subscriptions/:subscription_id/cancel', (req, res) => {
     const subscriptionId = req.params.subscription_id
     const subscription = db('subscriptions').updateById(subscriptionId, {
-      cancelation_requested_at: new Date().toISOString()
+      cancelation_requested_at: new Date().toISOString(),
+      canceled_at: faker.date.future()
     })
 
     if (!subscription) {
