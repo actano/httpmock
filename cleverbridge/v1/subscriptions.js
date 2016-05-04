@@ -1,6 +1,8 @@
 const express = require('express')
 const faker = require('faker')
 
+const utils = require('./utils')
+
 module.exports = (env, db) => {
   const router = express.Router()
 
@@ -12,9 +14,35 @@ module.exports = (env, db) => {
     })
 
     if (!subscription) {
-      res.json(404, 'Subscription not found.')
+      res.status(404).send('Subscription not found.')
     } else {
-      res.json(200, subscription)
+      const notification = {
+        notification_id: `notification_${subscriptionId}_cancelation_requested`,
+        client_id: '',
+        event: {
+          type: 'subscription.cancelation_requested',
+          id: `event_${subscriptionId}_cancelation_requested`,
+          occurred_at: new Date().toISOString()
+        },
+        resource: {
+          type: 'subscription',
+          id: subscriptionId,
+          current_state: subscription
+        }
+      }
+
+      utils.createNotificationRequest(env, notification)
+        .end((err) => {
+          if (err) {
+            res
+              .status(500)
+              .send(`An error occured while sending the notification: ${err}`)
+
+            return
+          }
+
+          res.json(subscription)
+        })
     }
   })
 

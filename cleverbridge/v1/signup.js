@@ -3,7 +3,8 @@ const express = require('express')
 const faker = require('faker')
 const get = require('lodash/fp/get')
 const querystring = require('querystring')
-const request = require('superagent')
+
+const utils = require('./utils')
 
 module.exports = (env, db) => {
   const router = express.Router()
@@ -25,10 +26,6 @@ module.exports = (env, db) => {
   })
 
   router.get('/perform-signup', (req, res) => {
-    const notificationUrl = env.MOCK_NOTIFICATION_URL
-    const notificationUsername = env.MOCK_NOTIFICATION_USERNAME
-    const notificationPassword = env.MOCK_NOTIFICATION_PASSWORD
-
     const subscriptionId = faker.random.uuid()
     const subscriptionRenewalDate = faker.date.future()
     const subscription = {
@@ -68,10 +65,7 @@ module.exports = (env, db) => {
 
     db('subscriptions').push(subscription)
 
-    request
-      .post(notificationUrl)
-      .auth(notificationUsername, notificationPassword)
-      .send(notification)
+    utils.createNotificationRequest(env, notification)
       .end((err) => {
         if (err) {
           res
