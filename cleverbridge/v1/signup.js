@@ -53,7 +53,7 @@ module.exports = (env, db) => {
       event: {
         type: 'subscription.created',
         id: `event_${subscriptionId}_created`,
-        occured_at: subscription.started_at
+        occurred_at: subscription.started_at
       },
       resource: {
         type: 'subscription',
@@ -82,7 +82,7 @@ module.exports = (env, db) => {
           .send(`The following subscription has been created:
             subscription_id: ${subscription.subscription_id}
             plan_id: ${subscription.plans[0].plan_id}
-            user_id: ${subscription.customer.user_id}
+            user_id: ${subscription.customer.your_customer_id}
             `)
       })
   })
