@@ -1,0 +1,21 @@
+{
+    "plans": [
+        {
+            "id": "1314A4",
+            "plan_id": "1314A4",
+            "plan_version": 0,
+            "name": "Test Plan 0",
+            "price_rules": {
+                "calculation_type": "net",
+                "default_currency_iso_code": "EUR",
+                "rules": [
+                    {
+                        "price": {
+                            "EUR": 54
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
