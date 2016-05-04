@@ -66,6 +66,17 @@ module.exports = (env, db) => {
       status: 'active',
       subscription_id: subscriptionId
     }
+    const invoiceId = faker.random.uuid()
+    const invoice = {
+      currency_iso_code: 'EUR',
+      customer_id: subscription.customer.your_customer_id,
+      created_at: subscription.started_at,
+      document_url: `/cleverbridge/v1/customers/${subscription.customer.your_customer_id}/invoices/${invoiceId}`,
+      gross: faker.finance.amount(),
+      id: invoiceId,
+      payment_provider_invoice_id: invoiceId,
+      type: 'charge'
+    }
     const notification = {
       notification_id: `notification_${subscriptionId}_created`,
       client_id: '',
@@ -82,6 +93,7 @@ module.exports = (env, db) => {
     }
 
     db('subscriptions').push(subscription)
+    db('invoices').push(invoice)
 
     utils.createNotificationRequest(env, notification)
       .end((err) => {
