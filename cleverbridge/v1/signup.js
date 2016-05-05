@@ -20,7 +20,7 @@ module.exports = (env, db) => {
       plan_id: get(['body', 'plan_id'], req)
     })
 
-    res.json(201, {
+    res.status(201).json({
       url: `http://${hostname}${req.baseUrl}/perform-signup?${query}`
     })
   })
