@@ -18,6 +18,8 @@
   "license": "all rights reserved",
   "private": true,
   "dependencies": {
+    "body-parser": "1.15.1",
+    "express": "4.13.4",
     "faker": "3.1.0",
     "json-server": "0.8.10",
     "lodash": "4.11.1",
