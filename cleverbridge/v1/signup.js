@@ -46,7 +46,7 @@ module.exports = (env, db) => {
         },
         payment_information: {
           payment_method: 'visa',
-          card_last_four_digits: faker.random.number({min: 1000, max: 9999}),
+          card_last_four_digits: `${faker.random.number({min: 1000, max: 9999})}`,
           card_expiration_date: `${creditCardExpirationDate.getMonth()}/${creditCardExpirationDate.getFullYear()}`
         },
         remote_ip: faker.internet.ip()
