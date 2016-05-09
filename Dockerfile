@@ -6,7 +6,8 @@ RUN npm install -g npm@3.8.5
 
 WORKDIR /opt/actano/http-mock
 
-ADD . /opt/actano/http-mock
+ADD src /opt/actano/http-mock
+ADD var /opt/actano/http-mock/var
 
 RUN npm install
 
