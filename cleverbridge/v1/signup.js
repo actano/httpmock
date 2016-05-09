@@ -66,7 +66,7 @@ module.exports = (env, db) => {
       status: 'active',
       subscription_id: subscriptionId
     }
-    const invoiceId = faker.random.uuid()
+    const invoiceId = `${faker.random.number({min: 100000000, max: 999999999})}`
     const invoice = {
       currency_iso_code: 'EUR',
       customer_id: subscription.customer.your_customer_id,
