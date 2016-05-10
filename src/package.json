@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/actano/rplan.git"
+    "url": "git://github.com/actano/httpmock.git"
   },
   "author": {
     "name": "Actano GmbH",
