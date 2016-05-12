@@ -23,6 +23,7 @@
     "faker": "3.1.0",
     "json-server": "0.8.10",
     "lodash": "4.11.1",
+    "ng-admin": "1.0.0-alpha2",
     "superagent": "1.8.3"
   }
 }
