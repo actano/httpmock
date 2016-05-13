@@ -17,7 +17,6 @@ mockAdmin.directive('callSubscriptionActionButton', [
         var entityName = scope.subscription.entityName
 
         scope.callAction = function () {
-          console.log(scope, adminApp)
           $http
             .post([
               adminApp.getEntity(entityName).baseApiUrl(),
