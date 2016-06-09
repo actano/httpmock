@@ -3,6 +3,7 @@ const jsonServer = require('json-server')
 
 const authentication = require('./authentication')
 const invoices = require('./invoices')
+const payment = require('./payment')
 const signup = require('./signup')
 const subscriptions = require('./subscriptions')
 
@@ -13,6 +14,7 @@ module.exports = (env, dbSource) => {
   router.use(authentication(env, jsonServerRouter.db))
   router.use(signup(env, jsonServerRouter.db))
   router.use(subscriptions(env, jsonServerRouter.db))
+  router.use(payment(env, jsonServerRouter.db))
   router.use(invoices(env, jsonServerRouter.db))
   router.use(jsonServerRouter)
 
