@@ -56,9 +56,10 @@ module.exports = (env, db) => {
   })
 
   router.post('/subscriptions/:subscription_id/update-payment', (req, res) => {
+    const subscriptionId = req.params.subscription_id
     const hostname = env.MOCK_SERVER_HOSTNAME || req.headers.host
     res.status(201).json({
-      url: `http://${hostname}${req.baseUrl}/generated-update-payment-url`
+      url: `http://${hostname}${req.baseUrl}/generated-update-payment-url?subscriptionId=${subscriptionId}`
     })
   })
 
