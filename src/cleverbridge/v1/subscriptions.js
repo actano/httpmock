@@ -1,5 +1,4 @@
 const express = require('express')
-const faker = require('faker')
 
 const utils = require('./utils')
 
@@ -54,6 +53,13 @@ module.exports = (env, db) => {
           res.json(subscription)
         })
     }
+  })
+
+  router.post('/subscriptions/:subscription_id/update-payment', (req, res) => {
+    const hostname = env.MOCK_SERVER_HOSTNAME || req.headers.host
+    res.status(201).json({
+      url: `http://${hostname}${req.baseUrl}/generated-update-payment-url`
+    })
   })
 
   router.post('/subscriptions/:subscription_id/expire', (req, res) => {
