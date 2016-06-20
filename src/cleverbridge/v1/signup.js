@@ -17,7 +17,9 @@ module.exports = (env, db) => {
     const hostname = env.MOCK_SERVER_HOSTNAME || req.headers.host
     const query = querystring.stringify({
       user_id: get(['body', 'your_customer_id'], req),
-      plan_id: get(['body', 'plan_id'], req)
+      plan_id: get(['body', 'plan_id'], req),
+      locale: get(['body', 'contact', 'locale'], req),
+      mvt_campaign: get(['body', 'mvt_campaign'], req)
     })
 
     res.status(201).json({
@@ -34,7 +36,7 @@ module.exports = (env, db) => {
         your_customer_id: req.query.user_id,
         default_currency_iso_code: 'EUR',
         default_contact: {
-          locale: 'en-US',
+          locale: req.query.locale,
           first_name: faker.name.firstName(),
           last_name: faker.name.lastName(),
           company: faker.company.companyName(),
@@ -91,6 +93,7 @@ module.exports = (env, db) => {
         current_state: subscription
       }
     }
+    const mvt_campaign = req.query.mvt_campaign
 
     db('subscriptions').push(subscription)
     db('invoices').push(invoice)
@@ -111,6 +114,8 @@ module.exports = (env, db) => {
             subscription_id: ${subscription.subscription_id}
             plan_id: ${subscription.plans[0].plan_id}
             user_id: ${subscription.customer.your_customer_id}
+            locale: ${subscription.customer.default_contact.locale}
+            mvt_campaign: ${mvt_campaign}
             `)
       })
   })
