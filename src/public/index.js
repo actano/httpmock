@@ -58,6 +58,17 @@ mockAdmin.directive('requestSubscriptionCancelationButton', function () {
   }
 })
 
+mockAdmin.directive('cancelSubscriptionCancelationButton', function () {
+  return {
+    restict: 'E',
+    scope: {
+      subscription: '=',
+      size: '@'
+    },
+    template: '<call-subscription-action-button size="{{ size }}" subscription="subscription" action="cancel-requested-cancelation">Cancel Cancelation</call-subscription-action-button>'
+  }
+})
+
 mockAdmin.directive('expireSubscriptionButton', function () {
   return {
     restict: 'E',

@@ -16,6 +16,7 @@ var createSubscriptionEntity = function (nga) {
       'edit',
       'delete',
       '<request-subscription-cancelation-button size="xs" subscription="entry"></request-subscription-cancelation-button>',
+      '<cancel-subscription-cancelation-button size="xs" subscription="entry"></cancel-subscription-cancelation-button>',
       '<expire-subscription-button size="xs" subscription="entry"></expire-subscription-button>'
     ])
 
@@ -40,6 +41,7 @@ var createSubscriptionEntity = function (nga) {
       'list',
       'delete',
       '<request-subscription-cancelation-button subscription="entry"></request-subscription-cancelation-button>',
+      '<cancel-subscription-cancelation-button subscription="entry"></cancel-subscription-cancelation-button>',
       '<expire-subscription-button subscription="entry"></expire-subscription-button>'
     ])
 
