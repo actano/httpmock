@@ -26,6 +26,16 @@ module.exports = (env, db) => {
     sendNotification(subscriptionId, subscription, notificationType, res)
   })
 
+  router.post('/subscriptions/:subscription_id/cancel-requested-cancelation', (req, res) => {
+    const notificationType = 'requested_cancelation_canceled'
+    const subscriptionId = req.params.subscription_id
+    const subscription = db('subscriptions').updateById(subscriptionId, {
+      cancelation_requested_at: undefined
+    })
+
+    sendNotification(subscriptionId, subscription, notificationType, res)
+  })
+
   router.post('/subscriptions/:subscription_id/update-payment', (req, res) => {
     const subscriptionId = req.params.subscription_id
     const hostname = env.MOCK_SERVER_HOSTNAME || req.headers.host
