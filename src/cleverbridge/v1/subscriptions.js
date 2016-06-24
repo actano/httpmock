@@ -17,76 +17,40 @@ module.exports = (env, db) => {
   })
 
   router.post('/subscriptions/:subscription_id/cancel', (req, res) => {
+    const notificationType = 'cancelation_requested'
     const subscriptionId = req.params.subscription_id
     const subscription = db('subscriptions').updateById(subscriptionId, {
       cancelation_requested_at: new Date().toISOString()
     })
 
-    if (!subscription) {
-      res.status(404).send('Subscription not found.')
-    } else {
-      const notification = {
-        notification_id: `notification_${subscriptionId}_cancelation_requested`,
-        client_id: '',
-        event: {
-          type: 'subscription.cancelation_requested',
-          id: `event_${subscriptionId}_cancelation_requested`,
-          occurred_at: new Date().toISOString()
-        },
-        resource: {
-          type: 'subscription',
-          id: subscriptionId,
-          current_state: subscription
-        }
-      }
-
-      utils.createNotificationRequest(env, notification)
-        .end((err) => {
-          if (err) {
-            res
-              .status(500)
-              .send(`An error occured while sending the notification: ${err}`)
-
-            return
-          }
-
-          res.json(subscription)
-        })
-    }
+    sendNotification(subscriptionId, subscription, notificationType, res)
   })
 
   router.post('/subscriptions/:subscription_id/update-payment', (req, res) => {
     const subscriptionId = req.params.subscription_id
     const hostname = env.MOCK_SERVER_HOSTNAME || req.headers.host
+
     res.status(201).json({
       url: `http://${hostname}${req.baseUrl}/generated-update-payment-url?subscriptionId=${subscriptionId}`
     })
   })
 
   router.post('/subscriptions/:subscription_id/expire', (req, res) => {
+    const notificationType = 'cancelation_performed'
     const subscriptionId = req.params.subscription_id
     const subscription = db('subscriptions').updateById(subscriptionId, {
       canceled_at: new Date().toISOString(),
       status: 'canceled'
     })
 
+    sendNotification(subscriptionId, subscription, notificationType, res)
+  })
+
+  function sendNotification (subscriptionId, subscription, notificationType, res) {
     if (!subscription) {
       res.status(404).send('Subscription not found.')
     } else {
-      const notification = {
-        notification_id: `notification_${subscriptionId}_cancelation_performed`,
-        client_id: '',
-        event: {
-          type: 'subscription.cancelation_performed',
-          id: `event_${subscriptionId}_cancelation_performed`,
-          occurred_at: new Date().toISOString()
-        },
-        resource: {
-          type: 'subscription',
-          id: subscriptionId,
-          current_state: subscription
-        }
-      }
+      const notification = createNotification(subscriptionId, subscription, notificationType)
 
       utils.createNotificationRequest(env, notification)
         .end((err) => {
@@ -101,7 +65,24 @@ module.exports = (env, db) => {
           res.json(subscription)
         })
     }
-  })
+  }
+
+  function createNotification (subscriptionId, subscription, notificationType) {
+    return {
+      notification_id: `notification_${subscriptionId}_${notificationType}`,
+      client_id: '',
+      event: {
+        type: `subscription.${notificationType}`,
+        id: `event_${subscriptionId}_${notificationType}`,
+        occurred_at: new Date().toISOString()
+      },
+      resource: {
+        type: 'subscription',
+        id: subscriptionId,
+        current_state: subscription
+      }
+    }
+  }
 
   return router
 }
