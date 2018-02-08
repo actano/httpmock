@@ -54,6 +54,8 @@ module.exports = (env, db) => {
         remote_ip: faker.internet.ip()
       },
       id: subscriptionId, // for mock retrieval
+      billing_cycle_frequency: '6m',
+      currency_iso_code: 'EUR',
       next_billing_at: subscriptionRenewalDate,
       next_renewal_at: subscriptionRenewalDate,
       plans: [
