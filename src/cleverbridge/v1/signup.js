@@ -75,7 +75,7 @@ module.exports = (env, db) => {
       currency_iso_code: 'EUR',
       customer_id: subscription.customer.your_customer_id,
       created_at: subscription.started_at,
-      document_url: `/cleverbridge/v1/customers/${subscription.customer.your_customer_id}/invoices/${invoiceId}`,
+      document_url: `/v1/customers/${subscription.customer.your_customer_id}/invoices/${invoiceId}`,
       gross: faker.finance.amount(),
       id: invoiceId,
       payment_provider_invoice_id: invoiceId,
