@@ -10,7 +10,7 @@ module.exports = (env, db) => {
   const router = express.Router()
 
   router.use(bodyParser.json({
-    limit: '10mb'
+    limit: '10mb',
   }))
 
   router.post('/signup-urls', (req, res) => {
@@ -19,11 +19,11 @@ module.exports = (env, db) => {
       user_id: get(['body', 'your_customer_id'], req),
       plan_id: get(['body', 'plan_id'], req),
       locale: get(['body', 'contact', 'locale'], req),
-      mvt_campaign: get(['body', 'mvt_campaign'], req)
+      mvt_campaign: get(['body', 'mvt_campaign'], req),
     })
 
     res.status(201).json({
-      url: `http://${hostname}${req.baseUrl}/perform-signup?${query}`
+      url: `http://${hostname}${req.baseUrl}/perform-signup?${query}`,
     })
   })
 
@@ -44,14 +44,14 @@ module.exports = (env, db) => {
           zip_code: faker.address.zipCode(),
           city: faker.address.city(),
           country_iso_code: 'US',
-          email: faker.internet.email()
+          email: faker.internet.email(),
         },
         payment_information: {
           payment_method: 'visa',
-          card_last_four_digits: `${faker.random.number({min: 1000, max: 9999})}`,
-          card_expiration_date: `${creditCardExpirationDate.getMonth()}/${creditCardExpirationDate.getFullYear()}`
+          card_last_four_digits: `${faker.random.number({ min: 1000, max: 9999 })}`,
+          card_expiration_date: `${creditCardExpirationDate.getMonth()}/${creditCardExpirationDate.getFullYear()}`,
         },
-        remote_ip: faker.internet.ip()
+        remote_ip: faker.internet.ip(),
       },
       id: subscriptionId, // for mock retrieval
       billing_cycle_frequency: '6m',
@@ -62,15 +62,15 @@ module.exports = (env, db) => {
         {
           plan_id: req.query.plan_id,
           plan_version: 0,
-          quantity: 1
-        }
+          quantity: 1,
+        },
       ],
       renewal_type: 'auto',
       started_at: new Date().toISOString(),
       status: 'active',
-      subscription_id: subscriptionId
+      subscription_id: subscriptionId,
     }
-    const invoiceId = `${faker.random.number({min: 100000000, max: 999999999})}`
+    const invoiceId = `${faker.random.number({ min: 100000000, max: 999999999 })}`
     const invoice = {
       currency_iso_code: 'EUR',
       customer_id: subscription.customer.your_customer_id,
@@ -79,7 +79,7 @@ module.exports = (env, db) => {
       gross: faker.finance.amount(),
       id: invoiceId,
       payment_provider_invoice_id: invoiceId,
-      type: 'charge'
+      type: 'charge',
     }
     const notification = {
       notification_id: `notification_${subscriptionId}_created`,
@@ -87,15 +87,15 @@ module.exports = (env, db) => {
       event: {
         type: 'subscription.created',
         id: `event_${subscriptionId}_created`,
-        occurred_at: subscription.started_at
+        occurred_at: subscription.started_at,
       },
       resource: {
         type: 'subscription',
         id: subscriptionId,
-        current_state: subscription
-      }
+        current_state: subscription,
+      },
     }
-    const mvt_campaign = req.query.mvt_campaign
+    const mvtCampaign = req.query.mvt_campaign
 
     db('subscriptions').push(subscription)
     db('invoices').push(invoice)
@@ -117,7 +117,7 @@ module.exports = (env, db) => {
             plan_id: ${subscription.plans[0].plan_id}
             user_id: ${subscription.customer.your_customer_id}
             locale: ${subscription.customer.default_contact.locale}
-            mvt_campaign: ${mvt_campaign}
+            mvt_campaign: ${mvtCampaign}
             `)
       })
   })
